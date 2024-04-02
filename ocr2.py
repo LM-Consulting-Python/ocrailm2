@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+from dotenv import load_dotenv
+import os
 from PIL import Image, ImageDraw
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.formrecognizer import DocumentAnalysisClient
@@ -17,16 +19,16 @@ def main():
     # Define o layout da página para ocupar a tela inteira
     st.title("Extração de Dados com Inteligência Artificial")
 
-    # Carregar configurações do arquivo JSON
-    with open("config.json", "r") as f:
-        config = json.load(f)
+    # Carrega as variáveis de ambiente do arquivo .env
+    load_dotenv()
 
-    endpoint = config["AZURE_ENDPOINT"]
-    key = config["AZURE_KEY"]
+    # Acessa as variáveis de ambiente
+    azure_endpoint = os.getenv("AZURE_ENDPOINT")
+    azure_key = os.getenv("AZURE_KEY")
 
     # Inicialize o cliente do Azure Form Recognizer
     form_recognizer_client = DocumentAnalysisClient(
-        endpoint=endpoint, credential=AzureKeyCredential(str(key))
+        endpoint=azure_endpoint, credential=AzureKeyCredential(str(azure_key))
     )
 
     col1, col2 = st.columns(2)  # Divide a tela em duas colunas
